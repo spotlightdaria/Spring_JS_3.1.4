@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml"> <html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Update</title>
+</head>
+<body>
+
+<h1>Update User</h1>
+<form action="#" th:action="@{/admin/user-update}" th:object="${user}" method="post">
+    <label for="id">User id: </label>
+    <input readonly type="number" th:field="*{id}" id="id">
+    <br>
+    <br>
+    <label for="username">Username: </label>
+    <input type="text" th:field="*{username}" id="username"/>
+    <br>
+    <br>
+
+    <label for="lastname">Lastname: </label>
+    <input type="text" th:field="*{lastName}" id="lastname" placeholder="lastname">
+    <br><br><br>
+
+    <label for="password">password: </label>
+    <input type="text" th:field="*{password}" id="password">
+    <br>
+    <br>
+    <label for="email">e-mail: </label>
+    <input type="text" th:field="*{email}" id="email">
+    <br>
+    <br>
+
+    <label for="role">Role</label>
+    <select name="role" id="role" multiple="multiple">
+        <option value="ROLE_USER">USER</option>
+        <option value="ROLE_ADMIN">ADMIN</option>
+    </select>
+    <br>
+    <br>
+
+    <input type="submit" value="Update"/>
+</form>
+<br>
+<form action="#" th:action="@{/admin}" method="get">
+    <input type="submit" value="Back"/>
+</form>
+<br>
+<form action="#" th:action="@{/logout}" method="get">
+    <input type="submit" value="exit"/>
+</form>
+
+</body>
+</html>
