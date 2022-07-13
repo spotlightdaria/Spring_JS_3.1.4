@@ -26,10 +26,10 @@
         <td th:text="${user.getEmail()}"/>
         <td th:text="${user.getRoles()}"/>
         <td>
-            <a th:href="@{/admin/edit/{id}(id=${user.getId()})}">Update</a>
+            <a th:href="@{/admin/user-update/{id}(id=${user.getId()})}">Update</a>
         </td>
         <td>
-            <a th:href="@{/admin/delete/{id}(id=${user.getId()})}">Delete</a>
+            <a th:href="@{/admin/user-delete/{id}(id=${user.getId()})}">Delete</a>
         </td>
     </tr>
     </tbody>
@@ -40,12 +40,12 @@
     <input type="submit" value="Create"/>
 </form>
 <br>
-<form action="#" th:action="@{/admin/user}">
-    <input type="submit" value="info user"/>
+<form action="#" th:action="@{/user}">
+    <input type="submit" value="Info user"/>
 </form>
 <br>
 <form action="#" th:action="@{/logout}" method="get">
-    <input type="submit" value="exit"/>
+    <input type="submit" value="Logout"/>
 </form>
 </div>
 

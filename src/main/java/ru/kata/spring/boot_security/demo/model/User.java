@@ -1,15 +1,14 @@
 package ru.kata.spring.boot_security.demo.model;
 
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 import java.util.stream.Collectors;
-
 
 @Entity
 @Table(name = "user_security")
@@ -21,10 +20,8 @@ public class User implements UserDetails {
 
     @Column(name = "username")
     private String username;
-
     @Column(name = "lastname")
     private String lastName;
-
     @Column(name = "email")
     private String email;
     @Column(name = "pass")
@@ -68,12 +65,16 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public Set<Role> getRoles() {
+    public List<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
+    public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public User(String username, String lastName, String email, String password) {
@@ -92,7 +93,8 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private Set <Role> roles;
+
+    private List<Role> roles = new ArrayList<Role>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -20,9 +20,10 @@ public class UserController {
     public UserController(AppService appService) {
         this.appService = appService;
     }
+
     @GetMapping
     public String userInfoPage(Principal principal, Model model) {
-        User user = appService.findByUsername (principal.getName());
+        User user = appService.findByUsername(principal.getName());
         model.addAttribute("user", user);
         return "user";
     }

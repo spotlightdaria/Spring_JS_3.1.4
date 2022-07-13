@@ -11,50 +11,58 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.reposirory.RoleRepository;
 import ru.kata.spring.boot_security.demo.reposirory.UserRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
+
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
-public class AppService implements UserDetailsService {// implements UserDetailsService
+public class AppService implements UserDetailsService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-//под вопросом
+
     @PersistenceContext
     private EntityManager entityManager;
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-//    @Transactional
-//    @Override
-//    public void save(User user) {
-//        if (user.getRoles().isEmpty()) {
-//            user.setRoles(Collections.singletonList(roleRepository.findRoleByName("ROLE_USER")));
-//        }
-//        user.setPassword(passwordEncoder.encode(user.getPassword()));
-//        userRepository.save(user);
-//    }
+
     @Autowired
     public AppService(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
     }
 
-
-    public User getUserById(Long id){
-        return userRepository.findById(id).orElse(null);
+    public User getUserById(Long id) {
+        return userRepository.findById(id).get();
     }
-    public List<User> getAllUsers(){
+
+    public List<Role> listRoles() {
+        return roleRepository.findAll();
+    }
+
+    public List<User> getAllUsers() {
         return userRepository.findAll();
     }
+
     @Transactional
-    public void saveUser(User user){
+    public void saveUser(User user) {
+        if (user.getRoles().isEmpty()) {
+            user.setRoles(Collections.singletonList(roleRepository.findRoleByName("ROLE_USER")));
+        }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
+    }
+
+    @Transactional
+    public void saveRole(Role role) {
+        entityManager.persist(role);
     }
 
     public User findByUsername(String username) {
@@ -62,15 +70,13 @@ public class AppService implements UserDetailsService {// implements UserDetails
     }
 
     @Transactional
-    public void removeUser(Long id){
-        Optional<User> user = userRepository.findById(id);
-        if (user.isPresent()) {
-            try {
-                userRepository.delete(user.get());
-            } catch (PersistenceException e) {
-                e.printStackTrace();
-            }
-        }
+    public void removeUser(Long id) {
+        userRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void update(User user) {
+        userRepository.save(user);
     }
 
     @Override
@@ -81,10 +87,9 @@ public class AppService implements UserDetailsService {// implements UserDetails
         if (user == null) {
             throw new UsernameNotFoundException(String.format("User '%s' not found", username));
         }
-
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
-                getAuthorities(user));
+        return user;
     }
+
     private static Collection<? extends GrantedAuthority> getAuthorities(User user) {
         String[] userRoles = user.getRoles().stream().map((role) -> role.getName()).toArray(String[]::new);
         Collection<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(userRoles);
