@@ -7,8 +7,8 @@
 </head>
 <body>
 <form th:method="POST" th:action="@{/admin/user-update/{id} (id=${user.getId()})}" th:object="${user}">
-<!--    <label for="id">ID</label>-->
-<!--    <input readonly type="number" th:field="*{id}" id="id" placeholder="ID">-->
+    <label for="id">ID</label>
+    <input readonly type="number" th:field="*{id}" id="id" placeholder="ID">
     <br/>
     <label for="username">Enter username: </label>
     <input type="text" th:field="*{username}" id="username"/>
