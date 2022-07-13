@@ -56,7 +56,7 @@ public class AdminController {
 
     @PostMapping("/user-update/{id}")
     public String update(@ModelAttribute("user") User user, @PathVariable("id") Long id) {
-        user.setId(user.getId());
+ //       user.setId(user.getId());
         appService.saveUser(user);
         return "redirect:/admin";
     }
