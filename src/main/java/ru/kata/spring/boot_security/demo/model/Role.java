@@ -40,6 +40,7 @@ public class Role implements GrantedAuthority {
 
     @Override
     public String toString() {
-        return this.name;
+        return getName().equals("ROLE_USER") ? "USER" : getName().equals("ROLE_ADMIN") ? "ADMIN" : null;
     }
+
 }
