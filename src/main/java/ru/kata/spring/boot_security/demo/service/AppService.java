@@ -18,9 +18,7 @@ import ru.kata.spring.boot_security.demo.reposirory.UserRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -53,9 +51,6 @@ public class AppService implements UserDetailsService {
 
     @Transactional
     public void saveUser(User user) {
-        if (user.getRoles().isEmpty()) {
-            user.setRoles(Collections.singletonList(roleRepository.findRoleByName("ROLE_USER")));
-        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
